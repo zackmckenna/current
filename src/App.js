@@ -3,7 +3,7 @@ import logo from './mintbean.png';
 import './styles/index.css';
 import axios from 'axios'
 
-import { Navbar, Nav, NavDropdown, FormControl, ListGroup, Form, Button, Container, Col, Row } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown, FormControl, ListGroup, Form, Button, Container, Col, Row, FormLabel, ListGroupItem } from 'react-bootstrap'
 
 function App() {
   const [input, setInput] = useState(1)
@@ -24,7 +24,11 @@ function App() {
 
   const handleInputChange = (event) => {
     event.preventDefault()
-    setInput(event.target.value)
+    if(event.target.value <= 1) {
+      setInput(1)
+    } else {
+      setInput(event.target.value)
+    }
   }
 
   const handleWidthChange = (event) => {
@@ -89,19 +93,13 @@ function App() {
   const currencyComponent = (item) => {
     return (
       <>
-      <ListGroup.Item onClick={() => handleBaseCurrencyChange(item[0], item[1])}>
+      <ListGroup.Item className='currencyComponent' style={{ cursor: 'pointer' }} onClick={() => handleBaseCurrencyChange(item[0], item[1])}>
         <Row >
           <Col>
           {item[0]}
           </Col>
           <Col>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div style={{ backgroundColor: 'red', height: '20px', width: item[1] * input * width }}>
-                {input / baseRate * item[1] }
-            </div>
+            {input / baseRate * item[1] }
           </Col>
         </Row>
       </ListGroup.Item>
@@ -122,7 +120,7 @@ function App() {
           //     </div>
           //   </>
           // )
-          currencyComponent(item)
+          return currencyComponent(item)
         })
       }
       console.log('there is data')
@@ -144,10 +142,7 @@ function App() {
             <NavDropdown title="Conversion Settings" id="basic-nav-dropdown">
             <Form onSubmit={e => handleSubmit(e)}>
               <Form.Group style={{ padding: '0 20px' }} controlId="formBasicEmail">
-                <Form.Control onChange={event => handleInputChange(event)} type="text" placeholder="enter target rate" />
-              </Form.Group>
-              <Form.Group style={{ padding: '0 20px' }} controlId="formBasicPassword">
-                <Form.Control onChange={event => handleWidthChange(event)} type="text" placeholder="comparison unit width" />
+                <Form.Control onChange={event => handleInputChange(event)} type="text" placeholder="amount" />
               </Form.Group>
               <Form.Group style={{ padding: '0 20px' }} controlId="formBasicPassword">
                 <Form.Control onChange={event => handleFilterChange(event)} type="text" placeholder="filter results" />
@@ -161,30 +156,36 @@ function App() {
       <div className="App">
         <Container>
           <Row>
-            <Col>
-              <h1>current</h1>
+            <Col style={{ color: 'white', backgroundColor: '#009FB7', borderRadius: '3px', padding: '15px'}}>
+              <h1>currensea</h1>
+              <p>an a dynamic currency converter</p>
             </Col>
           </Row>
-          <Form onSubmit={e => handleSubmit(e)}>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Amount</Form.Label>
-              <Form.Control onChange={event => handleInputChange(event)} type="text" placeholder="enter target rate" />
-            </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Comparison Scale (in pixels) </Form.Label>
-              <Form.Control onChange={event => handleWidthChange(event)} type="text" placeholder="comparison unit width" />
-            </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Filter results</Form.Label>
-              <Form.Control onChange={event => handleFilterChange(event)} type="text" placeholder="filter results" />
-            </Form.Group>
-          </Form>
+          <Row style={{ marginTop: '2em' }}>
+            <Col style={{ padding: '1em', backgroundColor: '#696773', borderRadius: '3px' }}>
+              <Form onSubmit={e => handleSubmit(e)}>
+                <Form.Group scontrolId="formBasicEmail">
+                  <Form.Control onChange={event => handleInputChange(event)} type="text" placeholder="enter amount" />
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Control onChange={event => handleFilterChange(event)} type="text" placeholder="filter results" />
+                </Form.Group>
+              </Form>
+            </Col>
+          </Row>
             {/* <Button variant="primary" type="submit">
               Submit
             </Button> */}
-            <h3>comparison scale is set at {width} pixels</h3>
-
+          <ListGroup style={{ marginTop: '1em'}}>
+              <ListGroupItem style={{ backgroundColor: '#FED766'}}>Base currency</ListGroupItem>
+              {currencyComponent([baseCurrency, baseRate])}
+          </ListGroup>
+          <Row style={{ marginBottom: '2em'}}>
+            <Col>
+            </Col>
+          </Row>
             <ListGroup>
+              <ListGroupItem style={{ backgroundColor: '#F49F0A' }}>Click to set as base currency</ListGroupItem>
               {renderData(data, baseRate)}
             </ListGroup>
         </Container>
