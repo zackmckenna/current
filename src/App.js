@@ -154,11 +154,11 @@ function App() {
         </Navbar.Collapse>
       </Navbar>
       <div className="App">
-        <Container>
+        <Container style={{ maxWidth: '800px' }}>
           <Row>
             <Col style={{ color: 'white', backgroundColor: '#009FB7', borderRadius: '3px', padding: '15px'}}>
               <h1>currensea</h1>
-              <p>an a dynamic currency converter</p>
+              <p>a quick, dynamic currency converter</p>
             </Col>
           </Row>
           <Row style={{ marginTop: '2em' }}>
